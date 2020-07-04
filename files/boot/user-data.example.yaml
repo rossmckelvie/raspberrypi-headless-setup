@@ -1,0 +1,73 @@
+#cloud-config
+# vim: syntax=yaml
+#
+
+hostname: rossberrypi
+manage_etc_hosts: true
+
+resize_rootfs: true
+growpart:
+    mode: auto
+    devices: ["/"]
+    ignore_growroot_disabled: false
+
+users:
+  - name: pi
+    gecos: "DefaultUser"
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    groups: users
+    ssh_authorized_keys:
+      - ssh-rsa YOUR_PUBLIC_KEY_HERE you@example.com
+    lock_passwd: false
+    ssh_pwauth: false
+    chpasswd: { expire: false }
+
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+packages:
+  - ntp
+
+locale: "en_US.UTF-8"
+timezone: "America/Chicago"
+
+write_files:
+  - path: /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
+    owner: root:root
+    permissions: '0600'
+    content: |
+      ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+      update_config=1
+      country=US
+
+      network={
+        ssid="YOUR_SSID_HERE"
+        psk=GENERATED_PSK_HERE_OR_RAW_PASSWORD_IF_LAZY
+        priority=1
+        id_str="iot"
+      }
+
+      network={
+        ssid="YOUR_OTHER_SSID_HERE"
+        psk=GENERATED_PSK_HERE_OR_RAW_PASSWORD_IF_LAZY
+        priority=2
+        id_str="trusted"
+      }
+
+
+# These commands will be ran once on first boot only
+runcmd:
+  # Pickup the hostname changes
+  - 'systemctl disable dhcpcd'
+  - 'systemctl enable networking'
+  - 'ifup wlan0'
+
+power_state:
+  delay: "+5"
+  mode: reboot
+  message: cloud-init complete
+  timeout: 120
+  condition: True
+
+final_message: "The system is finally up, after $UPTIME seconds"

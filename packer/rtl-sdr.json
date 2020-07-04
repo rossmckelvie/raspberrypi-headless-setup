@@ -1,0 +1,20 @@
+{
+    "variables": {},
+    "builders": [
+        {
+            "type": "arm-image",
+            "iso_url": "file:////build/output-arm-image/base.img",
+            "iso_checksum_type": "sha256",
+            "iso_checksum": "9988faf0705aba305d3a5dc85837f04be0359ed09cb5a39ed5f8374a00324689",
+            "last_partition_extra_size": 524288000,
+            "image_type": "raspberrypi",
+            "image_mounts": ["/boot", "/"]
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "packer/rtl-sdr.sh"
+        }
+    ]
+}
