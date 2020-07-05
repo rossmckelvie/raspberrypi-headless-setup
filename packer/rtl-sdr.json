@@ -5,7 +5,7 @@
             "type": "arm-image",
             "iso_url": "file:////build/output-arm-image/base.img",
             "iso_checksum_type": "sha256",
-            "iso_checksum": "9988faf0705aba305d3a5dc85837f04be0359ed09cb5a39ed5f8374a00324689",
+            "iso_checksum": "05cf9943dc45c42951f63adb019990ccd0122b5a5e9979653ad19be9da4a43b3",
             "last_partition_extra_size": 524288000,
             "image_type": "raspberrypi",
             "image_mounts": ["/boot", "/"]
@@ -15,6 +15,34 @@
         {
             "type": "shell",
             "script": "packer/rtl-sdr.sh"
+        },
+        {
+            "type": "file",
+            "source": "files/home/pi/direwolf/sdr.conf",
+            "destination": "/home/pi/direwolf/sdr.conf"
+        },
+        {
+            "type": "file",
+            "source": "files/home/pi/dw-start.sh",
+            "destination": "/home/pi/dw-start.sh"
+        },
+        {
+            "type": "file",
+            "source": "files/home/pi/rtl-dw-start.sh",
+            "destination": "/home/pi/rtl-dw-start.sh"
+        },
+        {
+            "type": "file",
+            "source": "files/etc/cron.d/rtl-sdr",
+            "destination": "/etc/cron.d/rtl-sdr"
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "chmod +x /home/pi/dw-start.sh",
+                "chmod +x /home/pi/rtl-dw-start.sh",
+                "chown -R pi:pi /home/pi"
+            ]
         }
     ]
 }

@@ -28,7 +28,8 @@ apt-get install -qy --no-install-recommends \
     curl \
     unzip \
     cloud-init \
-    ssh-import-id
+    ssh-import-id \
+    screen
 apt-get autoremove -y
 
 # Link cloud-init config to VFAT /boot partition

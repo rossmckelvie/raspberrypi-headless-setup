@@ -4,3 +4,4 @@ packer_cache
 .DS_Store
 user-data.yaml
 wpa_supplicant.conf
+sdr.conf

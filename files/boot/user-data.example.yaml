@@ -4,6 +4,7 @@
 
 hostname: rossberrypi
 manage_etc_hosts: true
+apt_preserve_sources_list: true
 
 resize_rootfs: true
 growpart:
@@ -31,43 +32,5 @@ packages:
 
 locale: "en_US.UTF-8"
 timezone: "America/Chicago"
-
-write_files:
-  - path: /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
-    owner: root:root
-    permissions: '0600'
-    content: |
-      ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-      update_config=1
-      country=US
-
-      network={
-        ssid="YOUR_SSID_HERE"
-        psk=GENERATED_PSK_HERE_OR_RAW_PASSWORD_IF_LAZY
-        priority=1
-        id_str="iot"
-      }
-
-      network={
-        ssid="YOUR_OTHER_SSID_HERE"
-        psk=GENERATED_PSK_HERE_OR_RAW_PASSWORD_IF_LAZY
-        priority=2
-        id_str="trusted"
-      }
-
-
-# These commands will be ran once on first boot only
-runcmd:
-  # Pickup the hostname changes
-  - 'systemctl disable dhcpcd'
-  - 'systemctl enable networking'
-  - 'ifup wlan0'
-
-power_state:
-  delay: "+5"
-  mode: reboot
-  message: cloud-init complete
-  timeout: 120
-  condition: True
 
 final_message: "The system is finally up, after $UPTIME seconds"

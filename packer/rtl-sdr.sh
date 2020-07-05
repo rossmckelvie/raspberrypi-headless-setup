@@ -27,5 +27,3 @@ make
 make install
 ldconfig
 
-# Chown everything to pi user
-chown -R pi:pi /home/pi
