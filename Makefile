@@ -17,24 +17,7 @@ img-base: docker clean
 	docker.pkg.github.com/solo-io/packer-builder-arm-image/packer-builder-arm build packer/base.json
 	mv output-arm-image/image output-arm-image/base.img
 
-img-sdr: docker clean
-	docker run \
-		--rm \
-		--privileged \
-		-v ${PWD}:/build:ro \
-		-v ${PWD}/packer_cache:/build/packer_cache \
-		-v ${PWD}/output-arm-image:/build/output-arm-image \
-		-e PACKER_CACHE_DIR=/build/packer_cache \
-	docker.pkg.github.com/solo-io/packer-builder-arm-image/packer-builder-arm build packer/rtl-sdr.json
-	mv output-arm-image/image output-arm-image/sdr.img
-
 flash-base:
 	flash --force \
 		--userdata ./files/boot/user-data.yaml  \
 		./output-arm-image/base.img
-
-flash-sdr:
-	flash --force \
-		--hostname rtl-sdr \
-		--userdata ./files/boot/user-data.yaml \
-		./output-arm-image/sdr.img
